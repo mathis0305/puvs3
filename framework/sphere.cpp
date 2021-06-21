@@ -13,5 +13,5 @@ float Sphere::area() const {
 }
 
 float Sphere::volume() const {
-	return (4 / 3) * 2.0 * acos(0.0) * pow(radius_, 3);
+	return (4.0f / 3.0f) * (2.0 * acos(0.0)) * pow(radius_, 3);
 }
