@@ -1,6 +1,8 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
+#include <cmath>
+#include <glm/vec3.hpp >
 
 class Shape {
 public:
