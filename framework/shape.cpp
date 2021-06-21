@@ -16,4 +16,16 @@ Color Shape::get_color() const {
 	return color_;
 }
 
+std::ostream& Shape::print(std::ostream& os) const {
+	os  << "Name: " << name_
+		<< "\nColor: { " << color_.r << ", " << color_.g << ", " << color_.b
+		<< " }\n\n";
+	return os;
+}
+
+std::ostream& operator << (std::ostream& os, Shape const& s) {
+	s.print(os);
+	return os;
+}
+
 //Shape::~Shape() {}

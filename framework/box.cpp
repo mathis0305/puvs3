@@ -24,3 +24,12 @@ float Box::area() const {
 float Box::volume() const {
 	return abs(max_.x - min_.x) * abs(max_.y - min_.y) * abs(max_.z - min_.z);
 }
+
+std::ostream& Box::print(std::ostream& os) const {
+	os << "Name: " << name_
+		<< "\nColor: { " << color_.r << ", " << color_.g << ", " << color_.b
+		<< " }\nMin: {" << min_.x << ", " << min_.y << ", " << min_.z
+		<< " }\nMax: {" << max_.x << ", " << max_.y << ", " << max_.z
+		<< " }\n\n";
+	return os;
+}

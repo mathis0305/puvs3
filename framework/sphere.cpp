@@ -22,3 +22,12 @@ float Sphere::area() const {
 float Sphere::volume() const {
 	return (4.0f / 3.0f) * (2.0f * acos(0.0f)) * pow(radius_, 3);
 }
+
+std::ostream& Sphere::print(std::ostream& os) const {
+	os << "Name: " << name_
+		<< "\nColor: { " << color_.r << ", " << color_.g << ", " << color_.b
+		<< " }\nCenter: { " << mid_.x << ", " << mid_.y << ", " << mid_.z
+		<< " }\nRadius: " << radius_
+		<< "\n\n";
+	return os;
+}

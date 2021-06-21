@@ -38,7 +38,11 @@ TEST_CASE("vererbung" "[vererbung]") {
 	REQUIRE(s1.get_color().g == 0.0f);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+	Box b1{};
+	std::cout << b1;
+
+	Sphere s1{};
+	std::cout << s1;
   return Catch::Session().run(argc, argv);
 }
