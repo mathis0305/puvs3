@@ -15,6 +15,8 @@ Sphere::Sphere(std::string const& name, Color const& color, glm::vec3 const& mid
 	mid_{ mid },
 	radius_{ radius } {}
 
+Sphere::~Sphere() {}
+
 float Sphere::area() const {
 	return 8.0f * acos(0.0f) * pow(radius_, 2);
 }
@@ -24,9 +26,8 @@ float Sphere::volume() const {
 }
 
 std::ostream& Sphere::print(std::ostream& os) const {
-	os << "Name: " << name_
-		<< "\nColor: { " << color_.r << ", " << color_.g << ", " << color_.b
-		<< " }\nCenter: { " << mid_.x << ", " << mid_.y << ", " << mid_.z
+	Shape::print(os);
+	os 	<< "Center: { " << mid_.x << ", " << mid_.y << ", " << mid_.z
 		<< " }\nRadius: " << radius_
 		<< "\n\n";
 	return os;

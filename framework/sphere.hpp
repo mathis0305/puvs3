@@ -8,6 +8,7 @@ public:
 	Sphere();
 	Sphere(glm::vec3 const& mid, float radius);
 	Sphere(std::string const& name, Color const& color, glm::vec3 const& mid, float radius);
+	~Sphere();
 
 	float area() const override;
 	float volume() const override;

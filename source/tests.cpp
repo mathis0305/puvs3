@@ -39,6 +39,9 @@ TEST_CASE("vererbung" "[vererbung]") {
 }
 
 int main(int argc, char *argv[]) {
+	//Shape sh1{};
+	//std::cout << sh1;
+
 	Box b1{};
 	std::cout << b1;
 

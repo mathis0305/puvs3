@@ -1,8 +1,7 @@
 #include "shape.hpp"
 
 Shape::Shape() :
-	name_{ "default" },
-	color_{0.0f, 0.0f, 0.0f} {}
+	Shape::Shape{ "default", { 0.0f, 0.0f, 0.0f } } {}
 
 Shape::Shape(std::string const& name, Color const& color) :
 	name_{ name },
@@ -19,7 +18,7 @@ Color Shape::get_color() const {
 std::ostream& Shape::print(std::ostream& os) const {
 	os  << "Name: " << name_
 		<< "\nColor: { " << color_.r << ", " << color_.g << ", " << color_.b
-		<< " }\n\n";
+		<< " }\n";
 	return os;
 }
 
@@ -28,4 +27,4 @@ std::ostream& operator << (std::ostream& os, Shape const& s) {
 	return os;
 }
 
-//Shape::~Shape() {}
+Shape::~Shape() {}
