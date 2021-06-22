@@ -5,7 +5,7 @@
 #include "ray.hpp"
 
 
-
+/*
 TEST_CASE("area and volume of sphere" "[area_volume_sphere]") {
 	Sphere s1{};
 	Sphere s2{ {4.5f, 8.1f, -3.02f}, 27.39f };
@@ -101,12 +101,29 @@ TEST_CASE("intersect method", "[intersect_method]") {
 	REQUIRE(h6.name_ == "Sphere");
 	REQUIRE(h7.name_ == "Sphere");
 }
+*/
+TEST_CASE("Aufgabe 5.8 virtual destructor", "[virtual_destructor]") {
+	Color red{ 255 , 0, 0 };
+	glm::vec3 position{ 0.0f, 0.0f, 0.0f };
+
+	Sphere* s1 = new Sphere{ "sphere0 ", red,  position , 1.2f };
+	Shape* s2 = new Sphere{ "sphere1 ", red, position , 1.2f };
+
+	std::cout << "\n";
+	s1->print(std::cout);
+	s2->print(std::cout);
+
+	delete s1;
+	delete s2;
+}
 
 int main(int argc, char *argv[]) {
+	/*
 	Box b1{};
 	std::cout << b1;
 
 	Sphere s1{};
 	std::cout << s1;
+	*/
   return Catch::Session().run(argc, argv);
 }

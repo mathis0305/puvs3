@@ -3,19 +3,27 @@
 Sphere::Sphere() :
 	Shape::Shape{ "Sphere", { 0.0f, 0.0f, 0.0f } },
 	mid_{ 0.0f, 0.0f, 0.0f },
-	radius_{1.0f} {}
+	radius_{1.0f} {
+	std::cout << "default sphere constructor is called: " << name_ << "\n";
+}
 
 Sphere::Sphere(glm::vec3 const& mid, float radius) :
 	Shape::Shape{ "Sphere", { 0.0f, 0.0f, 0.0f } },
 	mid_{ mid },
-	radius_{ radius } {}
+	radius_{ radius } {
+	std::cout << "simple  sphere constructor is called: " << name_ << "\n"; 
+}
 
 Sphere::Sphere(std::string const& name, Color const& color, glm::vec3 const& mid, float radius) :
 	Shape::Shape{ name, color },
 	mid_{ mid },
-	radius_{ radius } {}
+	radius_{ radius } {
+	std::cout << "full    sphere constructor is called: " << name_ << "\n";
+}
 
-Sphere::~Sphere() {}
+Sphere::~Sphere() {
+	std::cout << "default sphere destructor  is called: " << name_ << "\n";
+}
 
 float Sphere::area() const {
 	return 8.0f * acos(0.0f) * pow(radius_, 2);
