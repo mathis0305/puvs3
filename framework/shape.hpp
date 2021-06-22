@@ -2,9 +2,13 @@
 #define SHAPE_HPP
 
 #include <cmath>
-#include <glm/vec3.hpp >
+#include <glm/vec3.hpp>
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/gtx/intersect.hpp>
 #include "color.hpp"
+#include "hitpoint.hpp"
+
 
 class Shape {
 public:

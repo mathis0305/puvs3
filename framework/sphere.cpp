@@ -32,3 +32,23 @@ std::ostream& Sphere::print(std::ostream& os) const {
 		<< "\n\n";
 	return os;
 }
+
+HitPoint Sphere::intersect(Ray const& r) const {
+	float len_direction = sqrt(pow(r.direction_.x, 2) + pow(r.direction_.y, 2) + pow(r.direction_.z, 2));
+	glm::vec3 normalized_direction{ (r.direction_.x / len_direction), (r.direction_.y / len_direction), (r.direction_.z / len_direction) };
+	float distance = 0.0f;
+	bool is_intersect =  glm::intersectRaySphere(r.origin_, normalized_direction, mid_, radius_ * radius_, distance);
+	HitPoint hitpoint{};
+	if (is_intersect) {
+		hitpoint.is_intersect_ = true;
+		hitpoint.distance_ = distance;
+		hitpoint.name_ = name_;
+		hitpoint.color_ = color_;
+		hitpoint.intersection_ = { { (r.origin_.x + distance + r.direction_.x),
+								     (r.origin_.y + distance + r.direction_.y),
+								     (r.origin_.z + distance + r.direction_.z) },
+								      r.direction_
+		};
+	}
+	return hitpoint;
+}
