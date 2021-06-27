@@ -1,0 +1,27 @@
+Aufgabe 5:
+Override stellt sicher, dass eine virtual function eine andere virtual function überschreibt. Wenn man es weglässt, wird es möglicherweise nicht überschrieben. 
+
+
+
+Aufgabe 7:
+Der statische Typ der Variable ist bei s1 die Sphere und bei s2 der Shape. Der statische Typ ist also der in der Deklaration festgelegte.
+
+Der dynamische Typ der Variable ist bei beiden Pointern eine Sphere. Das ist der Typ, der in der Definition festgelegt wird.
+Das funktioniert bei s2, weil Shape eine Basisklasse von Sphere ist.
+
+
+Der statische Typ wird zur Übersetzungszeit und der dynamische Typ zur Laufzeit überprüft.
+
+
+
+Aufgabe 8:
+Beim constructor wird zuerst die Basisklasse konstruiert und beim destructor andersherum.
+
+Für die s1 ist das virtual irrelevant, weil statischer und dynamischer Typ gleich sind. Bei der s2 ist dem aber nicht so.Da wird nämlich ein Shape deklariert und dann eine Sphere eingegeben.
+Ein destructor, der kein virtual hat, ruft demzufolge nur den Shape destructor auf. Dabei kann es zu Speicherproblemen kommen, weil auch noch der Sphere-destructor aufgerufen werden sollte.
+Das passiert, wenn man den destructor der Basisklasse virtual macht.
+
+
+Aufgabe 9:
+Die Klassenhierachie ist statisch bestimmt. Also die Klassen haben per Deklaration und Definition Beziehungen und Abhängigkeiten.
+Die Objektierachie ist dynamisch. Dort geht es um die Objekte an sich, die etwas von anderen vererben. Also nur um die konkreten Instanzen der Klassen.
