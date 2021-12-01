@@ -62,6 +62,7 @@ int main(int argc, char* argv[])
     int d1, d2, d3;         // dimensions of matrices
     int i, j, k;			// loop variables
     MPI_Status status;
+    float* send, * recv;
 
     /* print user instruction */
     if (argc != 3)
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
     MPI_Init(&argc, &argv);
     /* read user input */
     MPI_Comm_size(MPI_COMM_WORLD, &numNodes);
-    d1 = numNodes-1;		        // rows of A and C
+    d1 = numNodes - 1;		        // rows of A and C
     d2 = atoi(argv[1]);     // cols of A and rows of B
     d3 = atoi(argv[2]);     // cols of B and C
 
@@ -85,41 +86,44 @@ int main(int argc, char* argv[])
     B = alloc_mat(d2, d3);
     init_mat(B, d2, d3);
     C = alloc_mat(d1, d3);	// no initialisation of C, because it gets filled by matmult
-    D = alloc_mat(d1, d3);
+    send = (float*) malloc(d3 * sizeof(float));
+    recv = (float*) malloc(d3 * sizeof(float));
 
     /* serial version of matmult */
-    printf("Perform matrix multiplication...\n");		
+    printf("Perform matrix multiplication...\n");
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeID);
     //for (i = 0; i < d1; i++)
     if (nodeID != numNodes - 1) {           //berechnet für alle außer "letzter" Prozess
         for (j = 0; j < d3; j++) {
             for (k = 0; k < d2; k++) {
-                C[nodeID][j] += A[nodeID][k] * B[k][j];
+                //C[nodeID][j] += A[nodeID][k] * B[k][j];
+                send[j] += A[nodeID][k] * B[k][j];
             }
         }
-        //MPI_Send(C, 1, MPI_FLOAT, numNodes-1, 4711, MPI_COMM_WORLD);
+        MPI_Send(send, d3, MPI_FLOAT, numNodes - 1, 0, MPI_COMM_WORLD);
         //print_mat(C, d1, d3, "C1");
     }
-    /*else {
-        for (int m = 0; m < numNodes-1; m++) {
-            MPI_Recv(D, 1, MPI_FLOAT, m, 4711, MPI_COMM_WORLD, &status);
+    else {
+        for (int m = 0; m < numNodes - 1; m++) {
+            MPI_Recv(recv, d3, MPI_FLOAT, m, 0, MPI_COMM_WORLD, &status);
             //print_mat(D, d1, d3, "D");
-            for (k = 0; k < d2; k++) {
-                C[m][k] = D[m][k];
+            for (k = 0; k < d3; k++) {
+                C[m][k] = recv[k];
             }
-        }*/
-    print_mat(A, d1, d2, "A");
-    print_mat(B, d2, d3, "B");
-    print_mat(C, d1, d3, "C");
+        }
+        print_mat(A, d1, d2, "A");
+        print_mat(B, d2, d3, "B");
+        print_mat(C, d1, d3, "C");
 
-    printf("\nDone.\n");
-    MPI_Finalize();
-    /* test output */
+        printf("\nDone.\n");
+        MPI_Finalize();
+        /* test output */
 
-    /* free dynamic memory */
-    free_mat(A);
-    free_mat(B);
-    free_mat(C);
+        /* free dynamic memory */
+        free_mat(A);
+        free_mat(B);
+        free_mat(C);
 
-    return 0;
+        return 0;
+    }
 }
