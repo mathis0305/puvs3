@@ -64,17 +64,18 @@ int main(int argc, char* argv[])
     MPI_Status status;
 
     /* print user instruction */
-    if (argc != 4)
+    if (argc != 3)
     {
         printf("Matrix multiplication: C = A x B\n");
         printf("Usage: %s <NumRowA> <NumColA> <NumColB>\n", argv[0]);
         return 0;
     }
-
+    MPI_Init(&argc, &argv);
     /* read user input */
-    d1 = atoi(argv[1]);		        // rows of A and C
-    d2 = atoi(argv[2]);     // cols of A and rows of B
-    d3 = atoi(argv[3]);     // cols of B and C
+    MPI_Comm_size(MPI_COMM_WORLD, &numNodes);
+    d1 = numNodes-1;		        // rows of A and C
+    d2 = atoi(argv[1]);     // cols of A and rows of B
+    d3 = atoi(argv[2]);     // cols of B and C
 
     printf("Matrix sizes C[%d][%d] = A[%d][%d] x B[%d][%d]\n", d1, d3, d1, d2, d2, d3);
 
@@ -87,9 +88,7 @@ int main(int argc, char* argv[])
     D = alloc_mat(d1, d3);
 
     /* serial version of matmult */
-    printf("Perform matrix multiplication...\n");
-    MPI_Init(&argc + 1, &argv);				//ein Prozess mehr als über argc gegeben		
-    MPI_Comm_size(MPI_COMM_WORLD, &numNodes);
+    printf("Perform matrix multiplication...\n");		
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeID);
     //for (i = 0; i < d1; i++)
     if (nodeID != numNodes - 1) {           //berechnet für alle außer "letzter" Prozess
