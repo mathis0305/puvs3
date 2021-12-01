@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <mpi.h>		
 #include <iostream>
+#include <string>
 
 // ---------------------------------------------------------------------------
 // allocate space for empty matrix A[row][col]
@@ -46,29 +47,25 @@ void print_mat(float** A, int row, int col, char const* tag)
     }
 }
 
-float** serial_matrix(int d1, int d2, int d3) {
-    float** A, ** B, ** C, ** D;	// matrices
+/* serial version of matmult */
+float** serial_matrix(int d1, int d2, int d3, float** A, float** B) {
+    float** C;	            // matrices
     int i, j, k;			        // loop variables
-    A = alloc_mat(d1, d2);
-    init_mat(A, d1, d2);
-    B = alloc_mat(d2, d3);
-    init_mat(B, d2, d3);
     C = alloc_mat(d1, d3);	        // no initialisation of C, because it gets filled by matmult
 
     /* serial version of matmult */
-    printf("Perform matrix multiplication...\n");
     for (i = 0; i < d1; i++)
         for (j = 0; j < d3; j++)
             for (k = 0; k < d2; k++)
                 C[i][j] += A[i][k] * B[k][j];
-
     return C;
 }
 
-bool compare_function(float** A, int d1, int d2, int d3) {
-    float** B = serial_matrix(d1, d2, d3);
+/*compare two matrices for equalness, returns true if all elements are equal*/
+bool compare_function(float** A, int d1, int d2, int d3, float** A_, float** B_) {
+    float** B = serial_matrix(d1, d2, d3, A_, B_);
     for (int i = 0; i < d1; i++) {
-        for (int j = 0; j < d1; j++) {
+        for (int j = 0; j < d3; j++) {
             if (A[i][j] != B[i][j]) {
                 return false;
             }
@@ -154,7 +151,7 @@ int main(int argc, char* argv[])
         print_mat(B, d2, d3, "B");
         print_mat(C, d1, d3, "C");
         
-        if (compare_function(C, d1, d2, d3)) {
+        if (compare_function(C, d1, d2, d3, A, B)) {
             printf("Funktioniert optimal!");
         }
         else {
