@@ -128,7 +128,6 @@ int main(int argc, char* argv[])
     }
 
     /* serial version of matmult */
-    printf("Perform matrix multiplication...\n");
     //for (i = 0; i < d1; i++)
     if (nodeID != numNodes - 1) {           //berechnet für alle außer "letzter" Prozess
         for (j = 0; j < d3; j++) {
@@ -143,6 +142,8 @@ int main(int argc, char* argv[])
         }*/
     }
     else {
+        printf("Perform matrix multiplication...\n");
+
         for (int m = 0; m < numNodes - 1; m++) {
             MPI_Recv(recv, d3, MPI_FLOAT, m, 0, MPI_COMM_WORLD, &status);
             for (k = 0; k < d3; k++) {
@@ -152,17 +153,18 @@ int main(int argc, char* argv[])
         print_mat(A, d1, d2, "A");
         print_mat(B, d2, d3, "B");
         print_mat(C, d1, d3, "C");
+        
+        if (compare_function(C, d1, d2, d3)) {
+            printf("Funktioniert optimal!");
+        }
+        else {
+            printf("Funktioniert nicht so optimal!");
+        }
 
         printf("\nDone.\n");
-
     }/* test output */
 
-    if (compare_function(C, d1, d2, d3)) {
-        printf("Funktioniert optimal!");
-    }
-    else {
-        printf("Funktioniert nicht so optimal!");
-    }
+    
     /* free dynamic memory */
     free_mat(A);
     free_mat(B);
