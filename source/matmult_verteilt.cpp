@@ -46,6 +46,37 @@ void print_mat(float** A, int row, int col, char const* tag)
     }
 }
 
+float** serial_matrix(int d1, int d2, int d3) {
+    float** A, ** B, ** C, ** D;	// matrices
+    int i, j, k;			        // loop variables
+    A = alloc_mat(d1, d2);
+    init_mat(A, d1, d2);
+    B = alloc_mat(d2, d3);
+    init_mat(B, d2, d3);
+    C = alloc_mat(d1, d3);	        // no initialisation of C, because it gets filled by matmult
+
+    /* serial version of matmult */
+    printf("Perform matrix multiplication...\n");
+    for (i = 0; i < d1; i++)
+        for (j = 0; j < d3; j++)
+            for (k = 0; k < d2; k++)
+                C[i][j] += A[i][k] * B[k][j];
+
+    return C;
+}
+
+bool compare_function(float** A, int d1, int d2, int d3) {
+    float** B = serial_matrix(d1, d2, d3);
+    for (int i = 0; i < d1; i++) {
+        for (int j = 0; j < d1; j++) {
+            if (A[i][j] != B[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 // ---------------------------------------------------------------------------
 // free dynamically allocated memory, which was used to store a 2D matrix
 void free_mat(float** A) {
@@ -126,6 +157,12 @@ int main(int argc, char* argv[])
 
     }/* test output */
 
+    if (compare_function(C, d1, d2, d3)) {
+        printf("Funktioniert optimal!");
+    }
+    else {
+        printf("Funktioniert nicht so optimal!");
+    }
     /* free dynamic memory */
     free_mat(A);
     free_mat(B);
