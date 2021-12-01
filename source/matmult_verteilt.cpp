@@ -74,11 +74,14 @@ int main(int argc, char* argv[])
     MPI_Init(&argc, &argv);
     /* read user input */
     MPI_Comm_size(MPI_COMM_WORLD, &numNodes);
+    MPI_Comm_rank(MPI_COMM_WORLD, &nodeID);
     d1 = numNodes - 1;		        // rows of A and C
     d2 = atoi(argv[1]);     // cols of A and rows of B
     d3 = atoi(argv[2]);     // cols of B and C
-
-    printf("Matrix sizes C[%d][%d] = A[%d][%d] x B[%d][%d]\n", d1, d3, d1, d2, d2, d3);
+    
+    if (nodeID == 0) {
+        printf("Matrix sizes C[%d][%d] = A[%d][%d] x B[%d][%d]\n", d1, d3, d1, d2, d2, d3);
+    }
 
     /* prepare matrices */
     A = alloc_mat(d1, d2);
@@ -89,9 +92,12 @@ int main(int argc, char* argv[])
     send = (float*) malloc(d3 * sizeof(float));
     recv = (float*) malloc(d3 * sizeof(float));
 
+    for (int l = 0; l < d3; l++) {
+        send[l] = 0.0f;
+    }
+
     /* serial version of matmult */
     printf("Perform matrix multiplication...\n");
-    MPI_Comm_rank(MPI_COMM_WORLD, &nodeID);
     //for (i = 0; i < d1; i++)
     if (nodeID != numNodes - 1) {           //berechnet für alle außer "letzter" Prozess
         for (j = 0; j < d3; j++) {
@@ -101,12 +107,13 @@ int main(int argc, char* argv[])
             }
         }
         MPI_Send(send, d3, MPI_FLOAT, numNodes - 1, 0, MPI_COMM_WORLD);
-        //print_mat(C, d1, d3, "C1");
+        /*for (int l = 0; l < d3; l++) {
+            std::cout << send[l] << "\n";
+        }*/
     }
     else {
         for (int m = 0; m < numNodes - 1; m++) {
             MPI_Recv(recv, d3, MPI_FLOAT, m, 0, MPI_COMM_WORLD, &status);
-            //print_mat(D, d1, d3, "D");
             for (k = 0; k < d3; k++) {
                 C[m][k] = recv[k];
             }
@@ -116,14 +123,14 @@ int main(int argc, char* argv[])
         print_mat(C, d1, d3, "C");
 
         printf("\nDone.\n");
-        MPI_Finalize();
-        /* test output */
 
-        /* free dynamic memory */
-        free_mat(A);
-        free_mat(B);
-        free_mat(C);
+    }/* test output */
 
-        return 0;
+    /* free dynamic memory */
+    free_mat(A);
+    free_mat(B);
+    free_mat(C);
+
+    MPI_Finalize();
+    return 0;
     }
-}
